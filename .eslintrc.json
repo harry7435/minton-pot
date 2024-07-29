@@ -1,9 +1,13 @@
 {
-  "extends": ["next/core-web-vitals", "prettier"],
-  "plugins": ["unused-imports", "@typescript-eslint/recommended"],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended", // ts 권장
+    "plugin:prettier/recommended" // eslint의 포매팅을 prettier로 사용.
+    // "prettier"
+  ],
+  "plugins": ["unused-imports", "prettier"],
   "rules": {
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
+    "no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "warn",
@@ -12,6 +16,12 @@
         "varsIgnorePattern": "^_",
         "args": "after-used",
         "argsIgnorePattern": "^_"
+      }
+    ],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
       }
     ]
   }
