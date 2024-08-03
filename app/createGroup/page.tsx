@@ -3,5 +3,5 @@ export default function CreateGroup() {
     <>
       <h1>모임 만들기</h1>
     </>
-  )
+  );
 }
