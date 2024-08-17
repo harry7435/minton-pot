@@ -32,14 +32,14 @@ export default function GroupNumInput() {
       {groupNum && regex.test(groupNum) ? (
         <Link
           href={`/group/${groupNum}`}
-          className="rounded-lg bg-white px-4 py-2 text-[#4686e0] shadow transition hover:bg-gray-200"
+          className="rounded-lg bg-white px-4 py-2 text-center text-[#4686e0] shadow transition hover:bg-gray-200"
         >
           모임 참여하기
         </Link>
       ) : (
         <button
           disabled
-          className="cursor-not-allowed rounded-lg bg-gray-300 px-4 py-2 text-gray-500 shadow"
+          className="cursor-not-allowed rounded-lg bg-gray-300 px-4 py-2 text-center text-gray-500 shadow"
         >
           모임 참여하기
         </button>
