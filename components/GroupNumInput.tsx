@@ -28,6 +28,7 @@ export default function GroupNumInput() {
         placeholder="모임 숫자 코드를 입력하세요"
         onChange={handleChangeInput}
         onKeyDown={handleKeyDownInput}
+        maxLength={4}
       />
       {groupNum && regex.test(groupNum) ? (
         <Link

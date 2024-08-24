@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main className="flex h-screen flex-col items-center justify-center bg-[#4686e0] p-4 text-white">
+    <main className="flex h-screen w-full flex-col items-center justify-center bg-[#4686e0] p-4 text-white">
       {/* Header Section */}
       <header className="mb-8 flex flex-col items-center">
         <h1 className="mb-2 text-4xl font-bold">Minton Pot</h1>

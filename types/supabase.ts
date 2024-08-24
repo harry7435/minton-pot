@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      group: {
+        Row: {
+          created_at: string;
+          id: number;
+          location: string | null;
+          maxPeople: number | null;
+          name: string | null;
+          password: number | null;
+          stadiumName: string | null;
+          totalCourts: number | null;
+          groupCode: number | null;
+        };
+        Insert: {
+          created_at?: string;
+          id?: number;
+          location?: string | null;
+          maxPeople?: number | null;
+          name?: string | null;
+          password?: number | null;
+          stadiumName?: string | null;
+          totalCourts?: number | null;
+          groupCode?: number | null;
+        };
+        Update: {
+          created_at?: string;
+          id?: number;
+          location?: string | null;
+          maxPeople?: number | null;
+          name?: string | null;
+          password?: number | null;
+          stadiumName?: string | null;
+          totalCourts?: number | null;
+          groupCode?: number | null;
+        };
+        Relationships: [];
+      };
       user: {
         Row: {
           created_at: string;

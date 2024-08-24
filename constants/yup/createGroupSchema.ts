@@ -21,8 +21,7 @@ export const schema = yup.object().shape({
     .positive()
     .integer(),
   password: yup
-    .string()
+    .number()
     .required('모임 비밀번호를 입력해주세요')
-    .min(4, '비밀번호는 최소 4자리 이상입니다')
-    .max(10, '비밀번호는 최대 10자리입니다'),
+    .min(4, '비밀번호는 최소 4자리 이상입니다'),
 });

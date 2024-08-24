@@ -10,6 +10,7 @@ interface InputItem {
     | 'password';
   placeholder: string;
   type?: string;
+  maxLength?: number;
 }
 
 const inputItem: InputItem[] = [
@@ -51,6 +52,7 @@ const inputItem: InputItem[] = [
     name: 'password',
     placeholder: '모임 비밀번호 (4 ~ 10자리)',
     type: 'password',
+    maxLength: 10,
   },
 ];
 
