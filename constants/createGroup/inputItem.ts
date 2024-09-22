@@ -11,6 +11,7 @@ interface InputItem {
   placeholder: string;
   type?: string;
   maxLength?: number;
+  pattern?: string;
 }
 
 const inputItem: InputItem[] = [
@@ -18,16 +19,19 @@ const inputItem: InputItem[] = [
     id: 0,
     name: 'meetingName',
     placeholder: '모임 이름',
+    maxLength: 20,
   },
   {
     id: 1,
     name: 'stadiumName',
     placeholder: '체육관 이름',
+    maxLength: 20,
   },
   {
     id: 2,
     name: 'location',
     placeholder: '모임 지역',
+    maxLength: 20,
   },
   {
     id: 3,

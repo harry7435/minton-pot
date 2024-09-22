@@ -1,4 +1,3 @@
-// pages/create-group.tsx
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -8,6 +7,8 @@ import inputItem from '@/constants/createGroup/inputItem';
 import { schema } from '@/constants/yup/createGroupSchema';
 import { useRouter } from 'next/navigation';
 import { createGroup, Group } from '@/lib/group/group';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function CreateGroup() {
   const [meetingCode, setMeetingCode] = useState<number | null>(null);
@@ -16,9 +17,11 @@ export default function CreateGroup() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(schema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
   });
 
   const onSubmit = async (submitData: Group) => {
@@ -32,8 +35,20 @@ export default function CreateGroup() {
   };
 
   return (
-    <main className="flex h-screen flex-col items-center justify-center bg-[#4686e0] p-4 text-white">
-      <h1 className="mb-4 text-2xl">모임 정보 입력</h1>
+    <main className="relative flex h-screen flex-col items-center justify-center bg-[#4686e0] p-4 text-white">
+      <h1 className="mb-4 text-center text-2xl">모임 정보 입력</h1>
+      <Link
+        href="/"
+        className="absolute left-6 top-6 mb-4 rounded-md border border-white p-2"
+      >
+        <Image
+          src="/assets/icon-home.svg"
+          alt="icon-home"
+          width={24}
+          height={24}
+        />
+      </Link>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex w-full max-w-md flex-col gap-4 overflow-y-auto p-2"
@@ -53,7 +68,11 @@ export default function CreateGroup() {
           </div>
         ))}
 
-        <button type="submit" className="rounded bg-blue-600 p-2">
+        <button
+          type="submit"
+          className="rounded bg-blue-600 py-2 text-gray-50 disabled:bg-slate-400"
+          disabled={!isValid}
+        >
           완료
         </button>
       </form>

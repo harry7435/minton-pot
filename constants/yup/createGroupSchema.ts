@@ -13,15 +13,21 @@ export const schema = yup.object().shape({
     .required('운동 최대 인원을 설정해주세요')
     .typeError('운동 최대 인원을 설정해주세요')
     .positive()
-    .integer(),
+    .integer()
+    .max(100, '운동 최대 인원은 100명까지 입력 가능합니다'),
   totalCourts: yup
     .number()
     .required('배드민턴 코트 갯수를 입력해주세요')
     .typeError('배드민턴 코트 갯수를 입력해주세요')
     .positive()
-    .integer(),
+    .integer()
+    .max(100, '코트 갯수는 최대 100개까지 입력 가능합니다'),
   password: yup
     .number()
     .required('모임 비밀번호를 입력해주세요')
-    .min(4, '비밀번호는 최소 4자리 이상입니다'),
+    .test(
+      'len',
+      '비밀번호는 최소 4자리 이상입니다',
+      (pw) => pw.toString().length > 3
+    ),
 });
