@@ -5,14 +5,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import inputItem from '@/constants/createGroup/inputItem';
 import { schema } from '@/constants/yup/createGroupSchema';
-import { useRouter } from 'next/navigation';
-import { createGroup, Group } from '@/lib/group/group';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function CreateGroup() {
   const [meetingCode, setMeetingCode] = useState<number | null>(null);
-  const router = useRouter();
 
   const {
     register,
@@ -24,14 +21,14 @@ export default function CreateGroup() {
     reValidateMode: 'onChange',
   });
 
-  const onSubmit = async (submitData: Group) => {
+  const onSubmit = async () => {
     // 랜덤 숫자 4~8자리 생성
     const code = Math.floor(1000 + Math.random() * 9000);
     setMeetingCode(code);
 
-    const { error } = await createGroup(submitData, code);
+    // const { error } = await createGroup(submitData, code);
 
-    if (!error) router.push(`/group/${code}`);
+    // if (!error) router.push(`/group/${code}`);
   };
 
   return (
