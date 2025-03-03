@@ -2,7 +2,16 @@
 
 import fireStore from '@/firebase/firestore';
 import { Group } from '@/types/group';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
 
 export async function createGroup(groupData: Group) {
   try {
@@ -26,6 +35,38 @@ export async function createGroup(groupData: Group) {
   } catch (error) {
     console.error('Error createGroup:', error);
     return { error };
+  }
+}
+
+export async function addMemberToGroup(
+  code: number,
+  memberData: {
+    name: string;
+    level: string;
+    ageGroup: string;
+    gender: string;
+    lastPhoneNumber: number;
+  }
+) {
+  try {
+    const q = query(collection(fireStore, 'groups'), where('code', '==', code));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return { success: false, error: 'No matching documents.' };
+    }
+
+    const groupDoc = querySnapshot.docs[0];
+    const groupRef = doc(fireStore, 'groups', groupDoc.id);
+
+    await updateDoc(groupRef, {
+      members: arrayUnion(memberData),
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error addMemberToGroup:', error);
+    return { success: false, error };
   }
 }
 

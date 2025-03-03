@@ -16,7 +16,7 @@ export default function GroupNumInput() {
 
   const handleKeyDownInput: KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Enter' && groupNum && regex.test(groupNum)) {
-      router.push(`/group/${groupNum}`);
+      router.push(`/group/join/${groupNum}`);
     }
   };
 

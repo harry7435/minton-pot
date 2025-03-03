@@ -1,4 +1,4 @@
-import { getGroup } from '@/lib/actions';
+import { getGroupByCode } from '@/lib/actions';
 import { formatDateToKorean } from '@/lib/utils';
 import { isGroup } from '@/types/group';
 
@@ -7,7 +7,7 @@ export default async function GroupPage({
 }: {
   params: { slug: string };
 }) {
-  const groupData = await getGroup(Number(params.slug));
+  const groupData = await getGroupByCode(Number(params.slug));
 
   if (!isGroup(groupData)) {
     throw new Error('Invalid group data');
@@ -15,7 +15,9 @@ export default async function GroupPage({
 
   return (
     <>
-      <h1>번개 모임명</h1>
+      <h1>모임 코드</h1>
+      <p>{params.slug}</p>
+      <h2>번개 모임명</h2>
       <p>{groupData.meetingName}</p>
       <h5>운동장소 및 지역</h5>
       <p>
