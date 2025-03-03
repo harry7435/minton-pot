@@ -5,6 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { addMemberToGroup } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
 import { schema } from '@/constants/yup/joinGroupSchema';
+import Link from 'next/link';
+import Image from 'next/image';
 
 type FormData = {
   name: string;
@@ -55,7 +57,18 @@ export default function GroupJoinPage({
 
   return (
     <main className="relative flex h-screen flex-col items-center justify-center bg-[#4686e0] p-4 text-white">
-      <h1 className="mb-4 text-center text-2xl">모임 참여</h1>
+      <Link
+        href="/"
+        className="absolute left-6 top-6 mb-4 rounded-md border border-white p-2"
+      >
+        <Image
+          src="/assets/icon-home.svg"
+          alt="icon-home"
+          width={24}
+          height={24}
+        />
+      </Link>
+      <h1 className="mb-4 text-center text-2xl">유저 정보 입력</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex w-full max-w-md flex-col gap-4 p-2"
@@ -78,11 +91,12 @@ export default function GroupJoinPage({
             className="w-full rounded p-2 px-3 text-black"
           >
             <option value="">선택하세요</option>
-            <option value="a">A</option>
-            <option value="b">B</option>
-            <option value="c">C</option>
-            <option value="d">D</option>
-            <option value="s">S</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="초심">초심</option>
+            <option value="S">S</option>
           </select>
           {errors.level && (
             <p className="font-semibold text-warn">{errors.level.message}</p>
@@ -95,11 +109,12 @@ export default function GroupJoinPage({
             className="w-full rounded p-2 px-3 text-black"
           >
             <option value="">선택하세요</option>
+            <option value="10대">10대</option>
             <option value="20대">20대</option>
             <option value="30대">30대</option>
             <option value="40대">40대</option>
             <option value="50대">50대</option>
-            <option value="60대">60대</option>
+            <option value="60대 이상">60대 이상</option>
           </select>
           {errors.ageGroup && (
             <p className="font-semibold text-warn">{errors.ageGroup.message}</p>

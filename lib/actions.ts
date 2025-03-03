@@ -12,6 +12,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function createGroup(groupData: Group) {
   try {
@@ -22,15 +23,19 @@ export async function createGroup(groupData: Group) {
     const existingCodes = await getAllGroupCodes();
     const code = await generateUniqueCode(existingCodes);
 
-    const docRef = await addDoc(collection(fireStore, 'groups'), {
+    const newGroupData = {
       ...groupData,
       code,
       createdAt,
       expiredAt,
-    });
+      members: [],
+      adminMemberIds: [],
+    };
+
+    const docRef = await addDoc(collection(fireStore, 'groups'), newGroupData);
 
     return {
-      data: { id: docRef.id, ...groupData, code, createdAt, expiredAt },
+      data: { id: docRef.id, ...newGroupData },
     };
   } catch (error) {
     console.error('Error createGroup:', error);
@@ -59,9 +64,26 @@ export async function addMemberToGroup(
     const groupDoc = querySnapshot.docs[0];
     const groupRef = doc(fireStore, 'groups', groupDoc.id);
 
-    await updateDoc(groupRef, {
-      members: arrayUnion(memberData),
-    });
+    const groupData = groupDoc.data();
+    const existingMemberIds = groupData.members.map(
+      (member: { id: string }) => member.id
+    );
+
+    console.log(groupData);
+
+    const memberId = await generateUniqueMemberId(existingMemberIds);
+    const memberWithId = { ...memberData, id: memberId };
+
+    if (groupDoc.data().adminMemberIds.length === 0) {
+      await updateDoc(groupRef, {
+        members: arrayUnion(memberWithId),
+        adminMemberIds: arrayUnion(memberWithId.id),
+      });
+    } else {
+      await updateDoc(groupRef, {
+        members: arrayUnion(memberWithId),
+      });
+    }
 
     return { success: true };
   } catch (error) {
@@ -116,4 +138,14 @@ async function generateUniqueCode(existingCodes: number[]): Promise<number> {
     code = Math.floor(Math.random() * (max - min + 1)) + min;
   } while (existingCodes.includes(code));
   return code;
+}
+
+async function generateUniqueMemberId(
+  existingMemberIds: string[]
+): Promise<string> {
+  let memberId;
+  do {
+    memberId = uuidv4();
+  } while (existingMemberIds.includes(memberId));
+  return memberId;
 }

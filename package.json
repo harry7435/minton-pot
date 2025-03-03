@@ -15,6 +15,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.2",
+    "uuid": "^11.1.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
