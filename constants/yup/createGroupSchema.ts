@@ -24,6 +24,7 @@ export const schema = yup.object().shape({
     .max(100, '코트 갯수는 최대 100개까지 입력 가능합니다'),
   password: yup
     .number()
+    .typeError('비밀번호는 숫자로 입력해주세요')
     .required('모임 비밀번호를 입력해주세요')
     .test(
       'len',

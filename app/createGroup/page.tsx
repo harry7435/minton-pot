@@ -7,9 +7,13 @@ import inputItem from '@/constants/createGroup/inputItem';
 import { schema } from '@/constants/yup/createGroupSchema';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Group } from '@/types/group';
+import { createGroup } from '@/lib/actions';
+import { useRouter } from 'next/navigation';
 
 export default function CreateGroup() {
   const [meetingCode, setMeetingCode] = useState<number | null>(null);
+  const router = useRouter();
 
   const {
     register,
@@ -21,14 +25,14 @@ export default function CreateGroup() {
     reValidateMode: 'onChange',
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async (newGroupData: Group) => {
     // 랜덤 숫자 4~8자리 생성
     const code = Math.floor(1000 + Math.random() * 9000);
     setMeetingCode(code);
 
-    // const { error } = await createGroup(submitData, code);
+    const data = await createGroup(newGroupData, code);
 
-    // if (!error) router.push(`/group/${code}`);
+    if (!data.error) router.push(`/group/${code}`);
   };
 
   return (
