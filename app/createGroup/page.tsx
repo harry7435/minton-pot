@@ -2,7 +2,6 @@
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
 import inputItem from '@/constants/createGroup/inputItem';
 import { schema } from '@/constants/yup/createGroupSchema';
 import Link from 'next/link';
@@ -12,7 +11,6 @@ import { createGroup } from '@/lib/actions';
 import { useRouter } from 'next/navigation';
 
 export default function CreateGroup() {
-  const [meetingCode, setMeetingCode] = useState<number | null>(null);
   const router = useRouter();
 
   const {
@@ -26,13 +24,12 @@ export default function CreateGroup() {
   });
 
   const onSubmit = async (newGroupData: Group) => {
-    // 랜덤 숫자 4~8자리 생성
-    const code = Math.floor(1000 + Math.random() * 9000);
-    setMeetingCode(code);
+    const { data } = await createGroup(newGroupData);
 
-    const data = await createGroup(newGroupData, code);
-
-    if (!data.error) router.push(`/group/${code}`);
+    if (data) {
+      alert(`모임 생성 완료! 코드 : ${data.code}`);
+      router.push(`/group/join/${data.code}`);
+    }
   };
 
   return (
@@ -77,12 +74,6 @@ export default function CreateGroup() {
           완료
         </button>
       </form>
-
-      {meetingCode && (
-        <p className="mt-4 text-lg">
-          모임 코드 : <strong>{meetingCode}</strong>
-        </p>
-      )}
     </main>
   );
 }

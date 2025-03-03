@@ -4,11 +4,15 @@ import fireStore from '@/firebase/firestore';
 import { Group } from '@/types/group';
 import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 
-export async function createGroup(groupData: Group, code: number) {
+export async function createGroup(groupData: Group) {
   try {
     const createdAt = new Date();
     const expiredAt = new Date();
     expiredAt.setMonth(expiredAt.getMonth() + 1);
+
+    const existingCodes = await getAllGroupCodes();
+    const code = await generateUniqueCode(existingCodes);
+
     const docRef = await addDoc(collection(fireStore, 'groups'), {
       ...groupData,
       code,
@@ -25,7 +29,7 @@ export async function createGroup(groupData: Group, code: number) {
   }
 }
 
-export async function getGroup(code: number) {
+export async function getGroupByCode(code: number) {
   try {
     const q = query(collection(fireStore, 'groups'), where('code', '==', code));
     const querySnapshot = await getDocs(q);
@@ -41,4 +45,34 @@ export async function getGroup(code: number) {
     console.error('Error getGroup:', error);
     return { data: null, error };
   }
+}
+
+export async function getAllGroupCodes(): Promise<number[]> {
+  try {
+    const querySnapshot = await getDocs(collection(fireStore, 'groups'));
+    const codes: number[] = [];
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      if (data.code) {
+        codes.push(data.code);
+      }
+    });
+
+    return codes;
+  } catch (error) {
+    console.error('Error getAllGroupCodes:', error);
+    return [];
+  }
+}
+
+async function generateUniqueCode(existingCodes: number[]): Promise<number> {
+  let code;
+  // 4~6자리 숫자 코드 생성
+  const min = 1000;
+  const max = 999999;
+  do {
+    code = Math.floor(Math.random() * (max - min + 1)) + min;
+  } while (existingCodes.includes(code));
+  return code;
 }
