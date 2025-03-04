@@ -129,6 +129,17 @@ export async function getAllGroupCodes(): Promise<number[]> {
   }
 }
 
+export async function checkGroupCodeExists(code: number): Promise<boolean> {
+  try {
+    const q = query(collection(fireStore, 'groups'), where('code', '==', code));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  } catch (error) {
+    console.error('Error checkGroupCodeExists:', error);
+    return false;
+  }
+}
+
 async function generateUniqueCode(existingCodes: number[]): Promise<number> {
   let code;
   // 4~6자리 숫자 코드 생성

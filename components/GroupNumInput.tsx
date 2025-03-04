@@ -1,23 +1,41 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChangeEventHandler, KeyboardEventHandler, useState } from 'react';
+import {
+  ChangeEventHandler,
+  KeyboardEventHandler,
+  useMemo,
+  useState,
+} from 'react';
+import { checkGroupCodeExists } from '@/lib/actions';
+
+const regex = /^[0-9]*$/;
 
 export default function GroupNumInput() {
   const [groupNum, setGroupNum] = useState('');
+  const isValidCode = useMemo(
+    () => regex.test(groupNum) && groupNum.length >= 4 && groupNum.length <= 6,
+    [groupNum]
+  );
   const router = useRouter();
-
-  const regex = /^[0-9]*$/;
 
   const handleChangeInput: ChangeEventHandler<HTMLInputElement> = (e) => {
     setGroupNum(e.target.value);
   };
 
-  const handleKeyDownInput: KeyboardEventHandler<HTMLInputElement> = (e) => {
-    if (e.key === 'Enter' && groupNum && regex.test(groupNum)) {
+  const handleJoinGroup = async () => {
+    const canJoin = await checkGroupCodeExists(Number(groupNum));
+    if (canJoin) {
       router.push(`/group/join/${groupNum}`);
+    } else {
+      alert('존재하지 않는 모임 코드입니다.');
     }
+  };
+
+  const handleKeyDownInput: KeyboardEventHandler<HTMLInputElement> = async (
+    e
+  ) => {
+    if (e.key === 'Enter' && isValidCode) await handleJoinGroup();
   };
 
   return (
@@ -28,15 +46,15 @@ export default function GroupNumInput() {
         placeholder="모임 숫자 코드를 입력하세요"
         onChange={handleChangeInput}
         onKeyDown={handleKeyDownInput}
-        maxLength={4}
+        maxLength={6}
       />
-      {groupNum && regex.test(groupNum) ? (
-        <Link
-          href={`/group/${groupNum}`}
+      {isValidCode ? (
+        <button
+          onClick={handleJoinGroup}
           className="rounded-lg bg-white px-4 py-2 text-center text-[#4686e0] shadow transition hover:bg-gray-200"
         >
           모임 참여하기
-        </Link>
+        </button>
       ) : (
         <button
           disabled
